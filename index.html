@@ -198,69 +198,28 @@
     document.getElementById(id).style.display = 'block';
   }
 
-  /* ============================================
-     GOOGLE DRIVE AUTO CONVERTER
-  ============================================ */
-  function convertGoogleDriveToDirect(url) {
-    if (!url) return null;
-
-    // Pattern /d/FILEID/
-    let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match) {
-      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-    }
-
-    // Pattern ?id=FILEID
-    match = url.match(/id=([a-zA-Z0-9_-]+)/);
-    if (match) {
-      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-    }
-
-    return url;
-  }
-
-  function resolveCoverUrl(rawUrl) {
-    if (!rawUrl) return '';
-    rawUrl = rawUrl.trim();
-
-    // Already image link
-    if (rawUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i)) return rawUrl;
-
-    // Try convert Google Drive link
-    const driveConverted = convertGoogleDriveToDirect(rawUrl);
-    return driveConverted;
-  }
-
-  /* ============================================
-     SAVE NEW CERPEN
-  ============================================ */
-  async function saveCerpen() {
-    const namaPenulis = document.getElementById('namaPenulis').value.trim();
-    const judul = document.getElementById('judul').value.trim();
-    const isi = document.getElementById('isi').value.trim();
-    const rawCover = document.getElementById('coverUrl').value.trim();
+  function saveCerpen() {
+    const namaPenulis = namaPenulis.value.trim();
+    const judul = judul.value.trim();
+    const isi = isi.value.trim();
+    const coverUrl = document.getElementById('coverUrl').value.trim();
 
     if (!namaPenulis || !judul || !isi) {
       alert("Semua field wajib kecuali cover!");
       return;
     }
 
-    const coverUrl = resolveCoverUrl(rawCover);
-
     db.collection("cerpensmanda").add({
       namaPenulis,
       judul,
       isi,
-      coverUrl: coverUrl,
+      coverUrl: coverUrl || '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     showSection('articles');
   }
 
-  /* ============================================
-     LISTENER & RENDER LIST
-  ============================================ */
   db.collection("cerpensmanda")
     .orderBy("createdAt","asc")
     .onSnapshot(snapshot => {
@@ -290,9 +249,6 @@
     });
   }
 
-  /* ============================================
-     DETAIL VIEW
-  ============================================ */
   function openDetail(i) {
     currentIndex = i;
     const c = cerpenList[i];
@@ -306,9 +262,6 @@
     showSection('detail');
   }
 
-  /* ============================================
-     EDIT
-  ============================================ */
   function startEdit() {
     const c = cerpenList[currentIndex];
 
@@ -320,16 +273,14 @@
     showSection('edit');
   }
 
-  async function updateCerpen() {
+  function updateCerpen() {
     const id = cerpenList[currentIndex].id;
-    const rawCover = document.getElementById('editCoverUrl').value.trim();
-    const coverUrl = resolveCoverUrl(rawCover);
 
     db.collection("cerpensmanda").doc(id).update({
       namaPenulis: editNamaPenulis.value,
       judul: editJudul.value,
       isi: editIsi.value,
-      coverUrl: coverUrl
+      coverUrl: editCoverUrl.value.trim()
     });
 
     showSection('detail');
