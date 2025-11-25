@@ -8,7 +8,12 @@
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       margin: 0; 
-      background: #e8ecf1;
+      background: linear-gradient(135deg, #f2f4f7 0%, #e8ecf1 100%); 
+      /* Ganti URL ini jika ingin menampilkan motif batik */
+      background-image: url('/mnt/data/Screenshot 2025-11-26 030651.png');
+      background-repeat: repeat; 
+      background-size: auto; 
+      background-attachment: fixed; 
       color: #333; 
     }
     header { 
@@ -52,266 +57,406 @@
       transform: translateY(-2px); 
       box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
     }
-    
-    /* ---------- COVER BUKU BARU ---------- */
-
-    .bookCover {
-      padding: 20px;
-      border-radius: 6px;
-      height: 200px;
-      position: relative;
-      box-shadow:
-        inset 0 0 8px rgba(255,255,255,0.4),
-        0 6px 18px rgba(0,0,0,0.25);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform .25s ease, box-shadow .25s ease;
+    .section { 
+      display: none; 
+      margin-top: 30px; 
+      animation: fadeIn 0.4s ease-in; 
     }
-
-    .bookCover:hover {
-      transform: scale(1.04) rotate(-1deg);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
     }
-
-    .bookSpine {
-      position: absolute;
-      left: 0;
-      width: 18px;
-      height: 100%;
-      background: rgba(0,0,0,0.18);
-      border-radius: 4px 0 0 4px;
+    textarea { 
+      width: 100%; 
+      height: 300px; 
+      padding: 15px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-family: inherit; 
+      font-size: 16px; 
+      resize: vertical; 
+      box-sizing: border-box; 
     }
-
-    .bookTitle {
-      font-size: 1.1em;
-      margin-bottom: 6px;
+    input[type="text"] { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 10px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      box-sizing: border-box; 
     }
-
-    .bookAuthor {
-      font-size: 0.85em;
-      opacity: 0.85;
+    label { 
+      display: block; 
+      margin-top: 18px; 
+      font-weight: bold; 
+      color: #555; 
     }
-
-    /* warna cover */
-    .red { background:#c62828; color:white; }
-    .yellow { background:#fdd835; color:#222; }
-    .green { background:#2e7d32; color:white; }
-    .blue { background:#1565c0; color:white; }
-    .orange { background:#ef6c00; color:white; }
-    .black { background:#212121; color:white; }
-
-    /* daftar cerpen grid */
-    #cerpenList {
-      margin-top: 40px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 22px;
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+      gap: 20px; 
+      margin-top: 20px; 
     }
-
-    /* form tambah cerpen */
-    #formSection {
-      margin-top: 40px;
-      padding: 20px;
-      background: #fafafa;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-      display: none;
+    .card { 
+      background: white; 
+      padding: 15px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); 
+      cursor: pointer; 
+      transition: transform 0.25s ease, box-shadow 0.25s ease; 
     }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 14px;
+    .card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 8px 28px rgba(0,0,0,0.15); 
     }
-
-    input, select, textarea {
-      width: 100%;
-      margin-top: 6px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #bbb;
-      font-size: 15px;
+    .card h3 { 
+      margin: 6px 0; 
+      font-size: 1.15em; 
+      color: #333; 
     }
-
-    textarea {
-      height: 140px;
-      resize: vertical;
+    .card p { 
+      margin: 4px 0; 
+      font-size: 0.95em; 
+      color: #666; 
     }
-
-    #submitBtn {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #5e35b1 0%, #8e24aa 100%);
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      font-size: 16px;
-      width: 100%;
-      transition: 0.3s;
+    .articleView { 
+      white-space: pre-wrap; 
+      background: white; 
+      padding: 24px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); 
+      line-height: 1.7; 
+      font-size: 16px; 
     }
-
-    #submitBtn:hover {
-      background: linear-gradient(135deg, #4527a0 0%, #6a1b9a 100%);
-      transform: translateY(-2px);
+    .search-bar { 
+      margin-bottom: 20px; 
+      text-align: center; 
     }
-
+    .search-bar input { 
+      width: 60%; 
+      padding: 10px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+    }
+    .actions { 
+      display: flex; 
+      gap: 10px; 
+      justify-content: center; 
+      margin-top: 18px; 
+    }
+    footer { 
+      background: #5a3e85; 
+      color: white; 
+      text-align: center; 
+      padding: 20px; 
+      margin-top: 40px; 
+      border-radius: 0 0 12px 12px;
+    }
+    @media (max-width: 768px) { 
+      .menu { flex-direction: column; align-items: center; } 
+      .grid { grid-template-columns: 1fr; } 
+      .search-bar input { width: 85%; } 
+    }
   </style>
 </head>
-
 <body>
+  <header>
+    <h1>Kumpulan Cerpen Peserta Didik Kelas XI.XI SMAN 2 Kuningan</h1>
+    <p>Bagikan karyamu dan baca karya teman-teman mu!</p>
+  </header>
 
-<header>
-  <h1>Kumpulan Cerpen Peserta Didik</h1>
-  <p>Setiap cerita adalah karya yang patut dibaca</p>
-</header>
+  <main>
+    <div class="menu">
+      <div class="btn" onclick="showSection('upload')">Unggah Tugas Cerpen</div>
+      <div class="btn" onclick="showSection('articles')">Lihat Kumpulan Cerpen</div>
+    </div>
 
-<main>
-  <div class="menu">
-    <button class="btn" onclick="showForm()">Tambah Cerpen</button>
-    <button class="btn" onclick="showCerpenList()">Lihat Daftar Cerpen</button>
-  </div>
+    <!-- UPLOAD SECTION -->
+    <div id="upload" class="section">
+      <h2>Unggah Cerpen Baru</h2>
+      <form id="uploadForm" onsubmit="return false;">
+        <label for="namaPenulis">Nama Penulis *</label>
+        <input type="text" id="namaPenulis" required />
 
-  <section id="formSection">
-    <h2>Tambahkan Cerpen Baru</h2>
+        <label for="judul">Judul Cerpen *</label>
+        <input type="text" id="judul" required />
 
-    <label>Judul Cerpen</label>
-    <input type="text" id="judulInput" placeholder="Masukkan judul cerpen">
+        <label for="isi">Isi Cerpen *</label>
+        <textarea id="isi" required placeholder="Tulis cerpen Anda di sini..."></textarea>
 
-    <label>Nama Penulis</label>
-    <input type="text" id="penulisInput" placeholder="Nama Anda">
+        <div class="actions">
+          <button type="button" class="btn" onclick="saveCerpen()">Simpan Cerpen</button>
+          <button type="button" class="btn" onclick="clearForm()">Bersihkan Form</button>
+        </div>
+      </form>
+    </div>
 
-    <label>Cover Warna</label>
-    <select id="coverColorInput">
-      <option value="red">Merah</option>
-      <option value="yellow">Kuning</option>
-      <option value="green">Hijau</option>
-      <option value="blue">Biru</option>
-      <option value="orange">Orange</option>
-      <option value="black">Hitam</option>
-    </select>
+    <!-- ARTICLES LIST -->
+    <div id="articles" class="section">
+      <h2>Kumpulan Cerpen</h2>
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="Cari berdasarkan judul..." onkeyup="filterCerpen()" />
+      </div>
+      <div id="list" class="grid"></div>
+      <p id="noResults" style="display: none; text-align: center; color: #777;">Tidak ada cerpen yang ditemukan.</p>
+    </div>
 
-    <label>Isi Cerpen</label>
-    <textarea id="cerpenInput" placeholder="Tulis cerpen di sini..."></textarea>
+    <!-- ARTICLE DETAIL -->
+    <div id="detail" class="section">
+      <div class="actions">
+        <button class="btn" onclick="backToList()">Kembali ke Daftar</button>
+        <button class="btn" onclick="startEdit()">Edit Cerpen</button>
+        <!-- HAPUS DINONAKTIFKAN SESUAI PILIHAN C3 -->
+      </div>
+      <h2 id="detailJudul" style="text-align: center;"></h2>
+      <p id="detailPenulis" style="font-style: italic; color: #777; text-align: center;"></p>
+      <div id="detailIsi" class="articleView"></div>
+    </div>
 
-    <button id="submitBtn" onclick="submitCerpen()">Kirim Cerpen</button>
-  </section>
+    <!-- EDIT SECTION -->
+    <div id="edit" class="section">
+      <h2>Edit Cerpen</h2>
+      <form id="editForm" onsubmit="return false;">
+        <label for="editNamaPenulis">Nama Penulis *</label>
+        <input type="text" id="editNamaPenulis" required />
 
-  <section id="cerpenList">
-    <!-- Cerpen akan tampil otomatis -->
-  </section>
-</main>
-<script type="module">
-  // Firebase configuration (punya kamu)
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtTEIsj-A_OY0wjkUFUcByG6XnStVqTSE",
-    authDomain: "cerpenwoyla.firebaseapp.com",
-    projectId: "cerpenwoyla",
-    storageBucket: "cerpenwoyla.firebasestorage.app",
-    messagingSenderId: "285662260886",
-    appId: "1:285662260886:web:b2023d3a51c7e134f81cb7"
-  };
+        <label for="editJudul">Judul Cerpen *</label>
+        <input type="text" id="editJudul" required />
 
-  // Load Firebase SDK
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    onSnapshot,
-    query,
-    orderBy,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+        <label for="editIsi">Isi Cerpen *</label>
+        <textarea id="editIsi" required></textarea>
 
-  // Init Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+        <div class="actions">
+          <button type="button" class="btn" onclick="updateCerpen()">Perbarui Cerpen</button>
+          <button type="button" class="btn" onclick="cancelEdit()">Batal</button>
+        </div>
+      </form>
+    </div>
+  </main>
 
-  const cerpenCollection = collection(db, "cerpen");
+  <footer>
+    <p>&copy; 2025 Website Kumpulan Cerpen</p>
+  </footer>
 
-  const formSection = document.getElementById("formSection");
-  const cerpenList = document.getElementById("cerpenList");
+  <!-- Firebase compat libraries (mudah dipakai untuk contoh ini) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-  function showForm() {
-    formSection.style.display = "block";
-    cerpenList.style.display = "none";
-  }
+  <script>
+    /***** GANTI dengan konfigurasi Anda (sudah Anda kirimkan) *****/
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtTEIsj-A_OY0wjkUFUcByG6XnStVqTSE",
+      authDomain: "cerpenwoyla.firebaseapp.com",
+      projectId: "cerpenwoyla",
+      storageBucket: "cerpenwoyla.firebasestorage.app",
+      messagingSenderId: "285662260886",
+      appId: "1:285662260886:web:b2023d3a51c7e134f81cb7"
+    };
 
-  function showCerpenList() {
-    formSection.style.display = "none";
-    cerpenList.style.display = "grid";
-  }
+    // Inisialisasi Firebase & Firestore (compat)
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  // Submit Cerpen
-  async function submitCerpen() {
-    const judul = document.getElementById("judulInput").value.trim();
-    const penulis = document.getElementById("penulisInput").value.trim();
-    const isi = document.getElementById("cerpenInput").value.trim();
-    const coverColor = document.getElementById("coverColorInput").value;
+    // State lokal
+    let cerpenList = []; // array of { id, namaPenulis, judul, isi, createdAt, ... }
+    let currentIndex = -1; // indeks dalam cerpenList
 
-    if (!judul || !penulis || !isi) {
-      alert("Lengkapi semua kolom sebelum mengirim.");
-      return;
+    // Tampilkan / sembunyikan section
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'block';
+      if (id === 'articles') {
+        // list diambil realtime dari Firestore; fungsi renderList sudah berlangganan
+        // tapi panggil renderList() sekali untuk memulai langganan jika belum
+        if (!window._renderSubscribed) {
+          renderList();
+        }
+      }
     }
 
-    await addDoc(cerpenCollection, {
-      judul,
-      penulis,
-      isi,
-      coverColor,
-      timestamp: serverTimestamp()
-    });
+    // Simpan cerpen ke Firestore
+    function saveCerpen() {
+      const namaPenulis = document.getElementById('namaPenulis').value.trim();
+      const judul = document.getElementById('judul').value.trim();
+      const isi = document.getElementById('isi').value.trim();
 
-    document.getElementById("judulInput").value = "";
-    document.getElementById("penulisInput").value = "";
-    document.getElementById("cerpenInput").value = "";
+      if (!namaPenulis || !judul || !isi) {
+        alert('Nama penulis, judul, dan isi cerpen wajib diisi!');
+        return;
+      }
 
-    alert("Cerpen berhasil dikirim!");
-    showCerpenList();
-  }
+      db.collection("cerpensmanda").add({
+        namaPenulis,
+        judul,
+        isi,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("Cerpen berhasil disimpan!");
+        clearForm();
+        showSection('articles');
+      }).catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan saat menyimpan. Cek console.');
+      });
+    }
 
-  window.submitCerpen = submitCerpen;
-  window.showForm = showForm;
-  window.showCerpenList = showCerpenList;
+    function clearForm() {
+      document.getElementById('namaPenulis').value = '';
+      document.getElementById('judul').value = '';
+      document.getElementById('isi').value = '';
+    }
 
-  // Listen realtime data
-  const q = query(cerpenCollection, orderBy("timestamp", "desc"));
+    // Render list realtime dari Firestore (urut: terlama di atas)
+    function renderList() {
+      // set flag supaya tidak subscribe dua kali
+      window._renderSubscribed = true;
 
-  onSnapshot(q, (snapshot) => {
-    cerpenList.innerHTML = "";
+      db.collection("cerpensmanda")
+        .orderBy("createdAt", "asc")
+        .onSnapshot(snapshot => {
+          // map setiap dokumen
+          cerpenList = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              namaPenulis: data.namaPenulis || '',
+              judul: data.judul || '',
+              isi: data.isi || '',
+              createdAt: data.createdAt ? data.createdAt.toDate() : null
+            };
+          });
+          updateListDisplay();
+        }, err => {
+          console.error('Firestore snapshot error:', err);
+        });
+    }
 
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const wrapper = document.createElement("div");
+    // Perbarui tampilan daftar (menggunakan cerpenList yang diupdate)
+    function updateListDisplay(filter = '') {
+      const container = document.getElementById('list');
+      const noResults = document.getElementById('noResults');
+      container.innerHTML = '';
 
-      wrapper.classList.add("book-card");
+      const filtered = cerpenList.filter(c => c.judul.toLowerCase().includes(filter.toLowerCase()));
 
-      wrapper.innerHTML = `
-        <div class="book-cover cover-${data.coverColor}">
-          <div class="book-title">${data.judul}</div>
-          <div class="book-author">oleh ${data.penulis}</div>
-        </div>
-      `;
+      if (filtered.length === 0) {
+        noResults.style.display = 'block';
+        return;
+      } else {
+        noResults.style.display = 'none';
+      }
 
-      wrapper.onclick = () => {
-        alert(
-          "Judul: " + data.judul +
-          "\nPenulis: " + data.penulis +
-          "\n\n" + data.isi
-        );
-      };
+      filtered.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        // klik membuka detail (temukan index asli di cerpenList)
+        const indexInFull = cerpenList.findIndex(x => x.id === c.id);
+        div.onclick = () => openDetail(indexInFull);
 
-      cerpenList.appendChild(wrapper);
-    });
-  });
+        // cuplikan isi (maks 160 karakter, tanpa memotong kata jika bisa)
+        let snippet = c.isi.replace(/\s+/g, ' ').trim();
+        if (snippet.length > 160) {
+          snippet = snippet.slice(0, 160);
+          const lastSpace = snippet.lastIndexOf(' ');
+          if (lastSpace > 100) snippet = snippet.slice(0, lastSpace) + '...';
+        }
 
-</script>
+        div.innerHTML = `
+          <h3>${escapeHtml(c.judul)}</h3>
+          <p style="font-weight:600; color:#444;">Oleh: ${escapeHtml(c.namaPenulis)}</p>
+          <p style="color:#666; margin-top:8px;">${escapeHtml(snippet)}</p>
+        `;
 
+        container.appendChild(div);
+      });
+    }
+
+    // Filter pencarian
+    function filterCerpen() {
+      const searchValue = document.getElementById('search').value;
+      updateListDisplay(searchValue);
+    }
+
+    // Buka detail cerpen
+    function openDetail(i) {
+      if (i < 0 || i >= cerpenList.length) return;
+      currentIndex = i;
+      const c = cerpenList[i];
+
+      showSection('detail');
+      document.getElementById('detailJudul').innerText = c.judul;
+      document.getElementById('detailPenulis').innerText = `Oleh: ${c.namaPenulis}`;
+      document.getElementById('detailIsi').innerText = c.isi;
+    }
+
+    function backToList() {
+      showSection('articles');
+    }
+
+    // Mulai edit: isi form edit dengan data saat ini
+    function startEdit() {
+      if (currentIndex < 0 || currentIndex >= cerpenList.length) {
+        alert('Pilih cerpen terlebih dahulu.');
+        return;
+      }
+      const c = cerpenList[currentIndex];
+      document.getElementById('editNamaPenulis').value = c.namaPenulis;
+      document.getElementById('editJudul').value = c.judul;
+      document.getElementById('editIsi').value = c.isi;
+      showSection('edit');
+    }
+
+    // Update cerpen ke Firestore
+    function updateCerpen() {
+      if (currentIndex < 0 || currentIndex >= cerpenList.length) {
+        alert('Tidak ada cerpen yang dipilih.');
+        return;
+      }
+      const id = cerpenList[currentIndex].id;
+      const namaPenulis = document.getElementById('editNamaPenulis').value.trim();
+      const judul = document.getElementById('editJudul').value.trim();
+      const isi = document.getElementById('editIsi').value.trim();
+
+      if (!namaPenulis || !judul || !isi) {
+        alert('Nama penulis, judul, dan isi cerpen wajib diisi!');
+        return;
+      }
+
+      db.collection("cerpensmanda").doc(id).update({
+        namaPenulis,
+        judul,
+        isi,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert('Cerpen berhasil diperbarui!');
+        showSection('detail');
+        // openDetail akan menampilkan data terbaru melalui listener snapshot
+      }).catch(err => {
+        console.error(err);
+        alert('Gagal memperbarui cerpen.');
+      });
+    }
+
+    function cancelEdit() {
+      showSection('detail');
+    }
+
+    // Utility: escape HTML to mencegah XSS sederhana
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Inisialisasi tampilan default
+    showSection('articles');
+  </script>
 </body>
 </html>
