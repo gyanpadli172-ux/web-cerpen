@@ -71,11 +71,11 @@
 
     .cover {
       width: 100%;
-      height: 150px;
+      height: 160px;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
       border-radius: 10px;
-      box-shadow: inset 0 0 35px rgba(0,0,0,0.25);
       margin-bottom: 10px;
     }
 
@@ -87,6 +87,7 @@
       border-radius: 12px;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
       box-shadow: inset 0 0 45px rgba(0,0,0,0.3);
     }
 
@@ -239,8 +240,12 @@
       div.className = 'card';
       div.onclick = () => openDetail(i);
 
+      const cover = c.coverUrl && c.coverUrl.trim() !== "" 
+        ? `background-image:url('${c.coverUrl}'); background-color:transparent;`
+        : `background-color:#bdbdbd;`;
+
       div.innerHTML = `
-        <div class="cover" style="background-image:url('${c.coverUrl}'); background-color:${c.coverUrl ? 'transparent' : '#bdbdbd'};"></div>
+        <div class="cover" style="${cover}"></div>
         <h3>${c.judul}</h3>
         <p><b>Oleh:</b> ${c.namaPenulis}</p>
       `;
@@ -253,8 +258,14 @@
     currentIndex = i;
     const c = cerpenList[i];
 
-    document.getElementById('detailCover').style.backgroundImage = `url('${c.coverUrl}')`;
-    document.getElementById('detailCover').style.backgroundColor = c.coverUrl ? 'transparent' : '#bdbdbd';
+    if (c.coverUrl && c.coverUrl.trim() !== "") {
+      document.getElementById('detailCover').style.backgroundImage = `url('${c.coverUrl}')`;
+      document.getElementById('detailCover').style.backgroundColor = "transparent";
+    } else {
+      document.getElementById('detailCover').style.backgroundImage = "none";
+      document.getElementById('detailCover').style.backgroundColor = "#bdbdbd";
+    }
+
     detailJudul.innerText = c.judul;
     detailPenulis.innerText = "Oleh: " + c.namaPenulis;
     detailIsi.innerText = c.isi;
