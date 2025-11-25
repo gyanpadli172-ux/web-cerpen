@@ -22,6 +22,7 @@
     .cover { width:100%; height:160px; border-radius:10px; background-size:cover; background-position:center; margin-bottom:10px; }
     #detailCover { width:380px; height:250px; margin:auto; margin-bottom:20px; border-radius:12px; background-size:cover; background-position:center; }
     #detailIsi { text-align:justify; margin-top:20px; font-size:17px; line-height:1.55; }
+    .small-note { font-size:0.9em; color:#666; margin-top:6px; }
     footer { background:#5a3e85; color:white; text-align:center; padding:20px; margin-top:40px; }
   </style>
 </head>
@@ -51,12 +52,18 @@
     <input type="text" id="judul">
 
     <label>Link Gambar Cover (opsional)</label>
-    <input type="text" id="coverUrl">
+    <input type="text" id="coverUrl" placeholder="Tempel link gambar cover (direct link)">
+
+    <label>Kode Hapus (wajib) — simpan baik-baik!</label>
+    <input type="text" id="deleteCode" placeholder="Contoh: 6 digit atau kombinasi huruf/angka">
 
     <label>Isi Cerpen *</label>
     <div id="editorUpload" class="editor-container"></div>
+    <div class="small-note">Gunakan toolbar untuk bold, italic, bullet, indent, align.</div>
 
-    <button class="btn" onclick="saveCerpen()">Simpan</button>
+    <div style="margin-top:12px;">
+      <button class="btn" onclick="saveCerpen()">Simpan</button>
+    </div>
   </div>
 
   <!-- ARTICLES LIST -->
@@ -72,8 +79,11 @@
     <p id="detailPenulis"></p>
     <div id="detailIsi"></div>
 
-    <button class="btn" onclick="startEdit()">Edit</button>
-    <button class="btn" onclick="showSection('articles')">Kembali</button>
+    <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+      <button class="btn" onclick="startEdit()">Edit</button>
+      <button class="btn" onclick="promptDelete()">Hapus Cerpen</button>
+      <button class="btn" onclick="showSection('articles')">Kembali</button>
+    </div>
   </div>
 
   <!-- EDIT SECTION -->
@@ -87,13 +97,18 @@
     <input type="text" id="editJudul">
 
     <label>Link Gambar Cover (opsional)</label>
-    <input type="text" id="editCoverUrl">
+    <input type="text" id="editCoverUrl" placeholder="Tempel link gambar cover (direct link)">
+
+    <label>Kode Hapus (isi jika ingin mengubah / kosongkan untuk tetap)</label>
+    <input type="text" id="editDeleteCode" placeholder="Kosong = tetap kode lama">
 
     <label>Isi Cerpen *</label>
     <div id="editorEdit" class="editor-container"></div>
 
-    <button class="btn" onclick="updateCerpen()">Perbarui</button>
-    <button class="btn" onclick="showSection('detail')">Batal</button>
+    <div style="margin-top:12px;">
+      <button class="btn" onclick="updateCerpen()">Perbarui</button>
+      <button class="btn" onclick="showSection('detail')">Batal</button>
+    </div>
   </div>
 
 </main>
@@ -108,7 +123,6 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <script>
-
   const firebaseConfig = {
     apiKey: "AIzaSyAtTEIsj-A_OY0wjkUFUcByG6XnStVqTSE",
     authDomain: "cerpenwoyla.firebaseapp.com",
@@ -128,101 +142,220 @@
     ['bold', 'italic', 'underline'],
     [{ 'align': [] }],
     [{ 'list': 'bullet' }],
-    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }]
   ];
 
+  // Inisialisasi Quill editors
   const editorUpload = new Quill('#editorUpload', { theme: 'snow', modules:{ toolbar: toolbarOptions }});
   const editorEdit = new Quill('#editorEdit', { theme: 'snow', modules:{ toolbar: toolbarOptions }});
 
+  // Tampilkan / sembunyikan section
   function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.style.display='none');
-    document.getElementById(id).style.display='block';
+    const el = document.getElementById(id);
+    if (el) el.style.display='block';
   }
 
-  function saveCerpen() {
-    const nama = namaPenulis.value.trim();
-    const judul = judul.value.trim();
+  // SIMPAN CERPEN (dengan deleteCode)
+  async function saveCerpen() {
+    const nama = document.getElementById('namaPenulis').value.trim();
+    const judul = document.getElementById('judul').value.trim();
+    const cover = document.getElementById('coverUrl').value.trim();
+    const deleteCode = document.getElementById('deleteCode').value.trim();
     const isiHTML = editorUpload.root.innerHTML.trim();
-    const cover = coverUrl.value.trim();
 
-    if (!nama || !judul || isiHTML === "<p><br></p>") {
-      alert("Semua field wajib kecuali cover!");
+    if (!nama || !judul) {
+      alert('Nama penulis dan judul wajib diisi.');
       return;
     }
 
-    db.collection("cerpensmanda").add({
-      namaPenulis:nama,
-      judul,
-      isi: isiHTML,
-      coverUrl: cover,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    // pastikan isi tidak kosong (Quill empty html is "<p><br></p>")
+    if (isiHTML === '' || isiHTML === '<p><br></p>') {
+      alert('Isi cerpen wajib diisi.');
+      return;
+    }
 
-    editorUpload.root.innerHTML = "";
-    showSection('articles');
+    if (!deleteCode) {
+      alert('Kode hapus wajib diisi — simpan dan beri tahu penulis agar tidak hilang.');
+      return;
+    }
+
+    // simpan ke Firestore
+    try {
+      await db.collection("cerpensmanda").add({
+        namaPenulis: nama,
+        judul,
+        isi: isiHTML,
+        coverUrl: cover || '',
+        deleteCode: deleteCode,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // kosongkan form & editor
+      document.getElementById('namaPenulis').value = '';
+      document.getElementById('judul').value = '';
+      document.getElementById('coverUrl').value = '';
+      document.getElementById('deleteCode').value = '';
+      editorUpload.root.innerHTML = '';
+
+      alert('Cerpen berhasil disimpan. Ingat kode hapusmu!');
+      showSection('articles');
+    } catch (err) {
+      console.error(err);
+      alert('Gagal menyimpan cerpen. Cek console.');
+    }
   }
 
+  // Listener realtime dari Firestore
   db.collection("cerpensmanda")
     .orderBy("createdAt","asc")
-    .onSnapshot(snapshot=>{
-      cerpenList = snapshot.docs.map(doc=>({ id:doc.id, ...doc.data() }));
+    .onSnapshot(snapshot => {
+      cerpenList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       updateList();
+    }, err => {
+      console.error('Firestore error:', err);
     });
 
+  // Update daftar kartu
   function updateList(){
-    const container=document.getElementById('list');
-    container.innerHTML="";
+    const container = document.getElementById('list');
+    container.innerHTML = '';
 
-    cerpenList.forEach((c,i)=>{
-      const div=document.createElement('div');
-      div.className='card';
-      div.onclick=()=>openDetail(i);
+    cerpenList.forEach((c, i) => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.onclick = () => openDetail(i);
 
-      div.innerHTML=`
-        <div class="cover" style="${c.coverUrl?`background-image:url('${c.coverUrl}')`:`background-color:#bdbdbd`}"></div>
-        <h3>${c.judul}</h3>
-        <p><b>Oleh:</b> ${c.namaPenulis}</p>
+      const coverStyle = c.coverUrl && c.coverUrl.trim() !== ''
+        ? `background-image:url('${c.coverUrl}'); background-color:transparent;`
+        : `background-color:#bdbdbd;`;
+
+      div.innerHTML = `
+        <div class="cover" style="${coverStyle}"></div>
+        <h3>${escapeHtml(c.judul)}</h3>
+        <p><b>Oleh:</b> ${escapeHtml(c.namaPenulis)}</p>
       `;
+
       container.appendChild(div);
     });
   }
 
+  // Buka detail cerpen
   function openDetail(i){
-    currentIndex=i;
-    const c=cerpenList[i];
+    currentIndex = i;
+    const c = cerpenList[i];
 
-    detailCover.style.backgroundImage = c.coverUrl ? `url('${c.coverUrl}')` : "none";
-    detailCover.style.backgroundColor = c.coverUrl ? "transparent" : "#bdbdbd";
+    const detailCoverEl = document.getElementById('detailCover');
+    if (c.coverUrl && c.coverUrl.trim() !== '') {
+      detailCoverEl.style.backgroundImage = `url('${c.coverUrl}')`;
+      detailCoverEl.style.backgroundColor = 'transparent';
+    } else {
+      detailCoverEl.style.backgroundImage = 'none';
+      detailCoverEl.style.backgroundColor = '#bdbdbd';
+    }
 
-    detailJudul.innerText=c.judul;
-    detailPenulis.innerText="Oleh: "+c.namaPenulis;
-    detailIsi.innerHTML=c.isi;
+    document.getElementById('detailJudul').innerText = c.judul;
+    document.getElementById('detailPenulis').innerText = 'Oleh: ' + c.namaPenulis;
+    document.getElementById('detailIsi').innerHTML = c.isi || '';
 
     showSection('detail');
   }
 
+  // Mulai edit (isi form edit)
   function startEdit(){
-    const c=cerpenList[currentIndex];
-    editNamaPenulis.value=c.namaPenulis;
-    editJudul.value=c.judul;
-    editCoverUrl.value=c.coverUrl;
-    editorEdit.root.innerHTML=c.isi;
+    if (currentIndex < 0 || currentIndex >= cerpenList.length) {
+      alert('Pilih cerpen dulu.');
+      return;
+    }
+    const c = cerpenList[currentIndex];
+    document.getElementById('editNamaPenulis').value = c.namaPenulis || '';
+    document.getElementById('editJudul').value = c.judul || '';
+    document.getElementById('editCoverUrl').value = c.coverUrl || '';
+    document.getElementById('editDeleteCode').value = ''; // kosongkan agar user sengaja mengisi jika ingin ganti
+    editorEdit.root.innerHTML = c.isi || '';
     showSection('edit');
   }
 
-  function updateCerpen(){
-    const id=cerpenList[currentIndex].id;
+  // Update cerpen (jika editDeleteCode kosong -> biarkan deleteCode lama)
+  async function updateCerpen(){
+    if (currentIndex < 0 || currentIndex >= cerpenList.length) {
+      alert('Tidak ada cerpen yang dipilih.');
+      return;
+    }
+    const id = cerpenList[currentIndex].id;
+    const newNama = document.getElementById('editNamaPenulis').value.trim();
+    const newJudul = document.getElementById('editJudul').value.trim();
+    const newCover = document.getElementById('editCoverUrl').value.trim();
+    const newDeleteCode = document.getElementById('editDeleteCode').value.trim(); // kosong = jangan ubah
+    const newIsi = editorEdit.root.innerHTML.trim();
 
-    db.collection("cerpensmanda").doc(id).update({
-      namaPenulis: editNamaPenulis.value,
-      judul: editJudul.value,
-      isi: editorEdit.root.innerHTML,
-      coverUrl: editCoverUrl.value.trim()
-    });
+    if (!newNama || !newJudul) {
+      alert('Nama penulis dan judul wajib diisi.');
+      return;
+    }
+    if (newIsi === '' || newIsi === '<p><br></p>') {
+      alert('Isi cerpen wajib diisi.');
+      return;
+    }
 
-    showSection('detail');
+    // Siapkan payload update
+    const payload = {
+      namaPenulis: newNama,
+      judul: newJudul,
+      isi: newIsi,
+      coverUrl: newCover
+    };
+    if (newDeleteCode) payload.deleteCode = newDeleteCode;
+
+    try {
+      await db.collection("cerpensmanda").doc(id).update(payload);
+      alert('Cerpen diperbarui.');
+      showSection('detail');
+    } catch (err) {
+      console.error(err);
+      alert('Gagal memperbarui. Cek console.');
+    }
   }
 
+  // Hapus cerpen dengan verifikasi kode
+  async function promptDelete() {
+    if (currentIndex < 0 || currentIndex >= cerpenList.length) {
+      alert('Tidak ada cerpen yang dipilih.');
+      return;
+    }
+    const c = cerpenList[currentIndex];
+
+    // Jika dokumen tidak punya deleteCode
+    if (!c.deleteCode) {
+      alert('Cerpen ini tidak memiliki kode hapus. Tidak dapat dihapus melalui fitur ini.');
+      return;
+    }
+
+    const userInput = prompt('Masukkan kode hapus cerpen:');
+    if (userInput === null) return; // cancel
+
+    if (userInput.trim() === c.deleteCode) {
+      // hapus
+      try {
+        await db.collection("cerpensmanda").doc(c.id).delete();
+        alert('Cerpen berhasil dihapus.');
+        showSection('articles');
+      } catch (err) {
+        console.error(err);
+        alert('Gagal menghapus. Cek console.');
+      }
+    } else {
+      alert('Kode salah. Cerpen tidak dihapus.');
+    }
+  }
+
+  // Simple escaping untuk judul/penulis tampil di card
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  // Start with articles view
   showSection('articles');
 </script>
 
