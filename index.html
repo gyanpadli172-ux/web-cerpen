@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Kumpulan Cerpen</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      background: linear-gradient(135deg, #f2f4f7 0%, #e8ecf1 100%); 
+      background-image: url('https://example.com/path/to/batik-mega-mendung.jpg'); /* Ganti dengan URL gambar motif batik mega mendung Anda */
+      background-repeat: repeat; 
+      background-size: auto; 
+      background-attachment: fixed; 
+      color: #333; 
+    }
+    header { 
+      background: linear-gradient(135deg, #5a3e85 0%, #7c4dff 100%); 
+      color: white; 
+      padding: 30px 20px; 
+      text-align: center; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+    }
+    header h1 { margin: 0; font-size: 2.5em; }
+    header p { margin: 10px 0 0; font-size: 1.2em; opacity: 0.9; }
+    main { 
+      max-width: 1200px; 
+      margin: auto; 
+      padding: 20px; 
+      background: rgba(255, 255, 255, 0.9); /* Tambahkan transparansi agar motif batik terlihat */
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+    }
+    .menu { 
+      display: flex; 
+      justify-content: center; 
+      gap: 20px; 
+      margin-top: 30px; 
+      flex-wrap: wrap; 
+    }
+    .btn { 
+      background: linear-gradient(135deg, #6d48a8 0%, #9c27b0 100%); 
+      color: white; 
+      padding: 15px 25px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      text-align: center; 
+      font-size: 18px; 
+      border: none; 
+      transition: all 0.3s ease; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+    }
+    .btn:hover { 
+      background: linear-gradient(135deg, #583a8a 0%, #7b1fa2 100%); 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+    }
+    .btn:disabled { 
+      background: #ccc; 
+      cursor: not-allowed; 
+      transform: none; 
+    }
+    .section { 
+      display: none; 
+      margin-top: 30px; 
+      animation: fadeIn 0.5s ease-in; 
+    }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    textarea { 
+      width: 100%; 
+      height: 300px; 
+      padding: 15px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-family: inherit; 
+      font-size: 16px; 
+      resize: vertical; 
+      box-sizing: border-box; 
+    }
+    input[type="text"], input[type="file"] { 
+      width: 100%; 
+      padding: 15px; 
+      margin-top: 10px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      box-sizing: border-box; 
+    }
+    label { 
+      display: block; 
+      margin-top: 20px; 
+      font-weight: bold; 
+      color: #555; 
+    }
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+      gap: 20px; 
+      margin-top: 20px; 
+    }
+    .card { 
+      background: white; 
+      padding: 15px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+      cursor: pointer; 
+      text-align: center; 
+      transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    }
+    .card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2); 
+    }
+    .card img { 
+      width: 100%; 
+      height: 150px; 
+      object-fit: cover; 
+      border-radius: 8px; 
+    }
+    .card h3 { 
+      margin: 10px 0; 
+      font-size: 1.2em; 
+      color: #333; 
+    }
+    .card p { 
+      margin: 5px 0; 
+      font-size: 0.9em; 
+      color: #777; 
+    }
+    .articleView { 
+      white-space: pre-wrap; 
+      background: white; 
+      padding: 30px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+      line-height: 1.6; 
+      font-size: 16px; 
+    }
+    .search-bar { 
+      margin-bottom: 20px; 
+      text-align: center; 
+    }
+    .search-bar input { 
+      width: 50%; 
+      padding: 10px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+    }
+    .actions { 
+      display: flex; 
+      gap: 10px; 
+      justify-content: center; 
+      margin-top: 20px; 
+    }
+    footer { 
+      background: #5a3e85; 
+      color: white; 
+      text-align: center; 
+      padding: 20px; 
+      margin-top: 50px; 
+    }
+    @media (max-width: 768px) { 
+      .menu { flex-direction: column; align-items: center; } 
+      .grid { grid-template-columns: 1fr; } 
+      .search-bar input { width: 80%; } 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Kumpulan Cerpen Peserta Didik</h1>
+  </header>
+
+  <main>
+    <div class="menu">
+      <div class="btn" onclick="showSection('upload')">Unggah Tugas Cerpen</div>
+      <div class="btn" onclick="showSection('articles')">Lihat Kumpulan Cerpen</div>
+    </div>
+
+    <!-- UPLOAD SECTION -->
+    <div id="upload" class="section">
+      <h2>Unggah Cerpen Baru</h2>
+      <form id="uploadForm">
+        <label for="namaPenulis">Nama Penulis *</label>
+        <input type="text" id="namaPenulis" required />
+
+        <label for="judul">Judul Cerpen *</label>
+        <input type="text" id="judul" required />
+
+        <label for="cover">Cover Cerpen (Opsional - Gambar)</label>
+        <input type="file" id="cover" accept="image/*" />
+
+        <label for="isi">Isi Cerpen *</label>
+        <textarea id="isi" required placeholder="Tulis cerpen Anda di sini..."></textarea>
+
+        <div class="actions">
+          <button type="button" class="btn" onclick="saveCerpen()">Simpan Cerpen</button>
+          <button type="button" class="btn" onclick="clearForm()">Bersihkan Form</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ARTICLES LIST -->
+    <div id="articles" class="section">
+      <h2>Kumpulan Cerpen</h2>
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="Cari berdasarkan judul..." onkeyup="filterCerpen()" />
+      </div>
+      <div id="list" class="grid"></div>
+      <p id="noResults" style="display: none; text-align: center; color: #777;">Tidak ada cerpen yang ditemukan.</p>
+    </div>
+
+    <!-- ARTICLE DETAIL -->
+    <div id="detail" class="section">
+      <div class="actions">
+        <button class="btn" onclick="backToList()">Kembali ke Daftar</button>
+        <button class="btn" onclick="editCerpen()">Edit Cerpen</button>
+        <button class="btn" onclick="deleteCerpen()" style="background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);">Hapus Cerpen</button>
+      </div>
+      <h2 id="detailJudul" style="text-align: center;"></h2>
+      <p id="detailPenulis" style="font-style: italic; color: #777; text-align: center;"></p>
+      <img id="detailCover" style="max-width: 400px; margin: 20px auto; display: none; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" />
+      <div id="detailIsi" class="articleView"></div>
+    </div>
+
+    <!-- EDIT SECTION (Hidden by default) -->
+    <div id="edit" class="section">
+      <h2>Edit Cerpen</h2>
+      <form id="editForm">
+        <label for="editNamaPenulis">Nama Penulis *</label>
+        <input type="text" id="editNamaPenulis" required />
+
+        <label for="editJudul">Judul Cerpen *</label>
+        <input type="text" id="editJudul" required />
+
+        <label for="editCover">Cover Cerpen (Opsional - Gambar)</label>
+        <input type="file" id="editCover" accept="image/*" />
+
+        <label for="editIsi">Isi Cerpen *</label>
+        <textarea id="editIsi" required></textarea>
+
+        <div class="actions">
+          <button type="button" class="btn" onclick="updateCerpen()">Perbarui Cerpen</button>
+          <button type="button" class="btn" onclick="cancelEdit()">Batal</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Website Kumpulan Cerpen. Dibuat untuk Peserta Didik.</p>
+  </footer>
+
+  <script>
+    let cerpenList = JSON.parse(localStorage.getItem("cerpenList") || "[]");
+    let currentIndex = -1;
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      if (id === 'articles') renderList();
+    }
+
+    function saveCerpen() {
+      const namaPenulis = document.getElementById('namaPenulis').value.trim();
+      const judul = document.getElementById('judul').value.trim();
+      const isi = document.getElementById('isi').value.trim();
+      const coverFile = document.getElementById('cover').files[0];
+
+      if (!namaPenulis || !judul || !isi) {
+        alert('Nama penulis, judul, dan isi cerpen wajib diisi!');
+        return;
+      }
+
+      let coverURL = null;
+      if (coverFile) {
+        coverURL = URL.createObjectURL(coverFile);
+      }
+
+      cerpenList.push({ namaPenulis, judul, isi, coverURL });
+      localStorage.setItem('cerpenList', JSON.stringify(cerpenList));
+
+      alert('Cerpen berhasil disimpan!');
+      clearForm();
+      showSection('articles');
+    }
+
+    function clearForm() {
+      document.getElementById('namaPenulis').value = '';
+      document.getElementById('judul').value = '';
+      document.getElementById('isi').value = '';
+      document.getElementById('cover').value = '';
+    }
+
+    function renderList(filter = '') {
+      const container = document.getElementById('list');
+      const noResults = document.getElementById('noResults');
+      container.innerHTML = '';
+
+      const filteredList = cerpenList.filter(c => c.judul.toLowerCase().includes(filter.toLowerCase()));
+
+      if (filteredList.length === 0) {
+        noResults.style.display = 'block';
+        return;
+      } else {
+        noResults.style.display = 'none';
+      }
+
+      filteredList.forEach((c, i) => {
+        const originalIndex = cerpenList.indexOf(c);
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.onclick = () => openDetail(originalIndex);
+
+        div.innerHTML = `
+          ${c.coverURL ? `<img src="${c.coverURL}" alt="Cover ${c.judul}">` : `<div style='height:150px;background:#ddd;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#777;'>Tidak Ada Cover</div>`}
+          <h3>${c.judul}</h3>
+          <p>Oleh: ${c.namaPenulis}</p>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function filterCerpen() {
+      const searchValue = document.getElementById('search').value;
+      renderList(searchValue);
+    }
+
+    function openDetail(i) {
+      currentIndex = i;
+      const c = cerpenList[i];
+
+      showSection('detail');
+      document.getElementById('detailJudul').innerText = c.judul;
+      document.getElementById('detailPenulis').innerText = `Oleh: ${c.namaPenulis}`;
+      document.getElementById('detailIsi').innerText = c.isi;
+
+      const img = document.getElementById('detailCover');
+      if (c.coverURL) {
+        img.src = c.coverURL;
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    function backToList() {
+      showSection('articles');
+    }
+
+    function editCerpen() {
+      const c = cerpenList[currentIndex];
+      document.getElementById('editNamaPenulis').value = c.namaPenulis;
+      document.getElementById('editJudul').value = c.judul;
+      document.getElementById('editIsi').value = c.isi;
+      // Note: File input can't be pre-filled for security reasons
+      showSection('edit');
+    }
+
+    function updateCerpen() {
+      const namaPenulis = document.getElementById('editNamaPenulis').value.trim();
+      const judul = document.getElementById('editJudul').value.trim();
+      const isi = document.getElementById('editIsi').value.trim();
+      const coverFile = document.getElementById('editCover').files[0];
+
+      if (!namaPenulis || !judul || !isi) {
+        alert('Nama penulis, judul, dan isi cerpen wajib diisi!');
+        return;
+      }
+
+      let coverURL = cerpenList[currentIndex].coverURL;
+      if (coverFile) {
+        coverURL = URL.createObjectURL(coverFile);
+      }
+
+      cerpenList[currentIndex] = { namaPenulis, judul, isi, coverURL };
+      localStorage.setItem('cerpenList', JSON.stringify(cerpenList));
+
+      alert('Cerpen berhasil diperbarui!');
+      showSection('detail');
+      openDetail(currentIndex);
+    }
+
+    function cancelEdit() {
+      showSection('detail');
+    }
+
+    function deleteCerpen() {
+      if (confirm('Apakah Anda yakin ingin menghapus cerpen ini?')) {
+        cerpenList.splice(currentIndex, 1);
+        localStorage.setItem('cerpenList', JSON.stringify(cerpenList));
+        alert('Cerpen berhasil dihapus!');
+        showSection('articles');
+      }
+    }
+
+    // Default view
+    showSection('articles');
+  </script>
+</body>
+</html>
